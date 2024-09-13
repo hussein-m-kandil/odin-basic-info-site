@@ -1,13 +1,10 @@
-import path from "node:path";
-import process from "node:process";
+import path from "path";
+import process from "process";
 import express from "express";
 
 const ROOT_DIR = process.cwd();
-const VIEWS_DIR = path.join(ROOT_DIR, "views");
-const PUBLIC_DIR = path.join(ROOT_DIR, "public");
-const HOSTNAME = "127.0.0.1";
-const SCHEME = "http";
-const PORT = process.env.PORT || 8080;
+const VIEWS_DIR = path.join(ROOT_DIR, "api/views");
+const PUBLIC_DIR = path.join(ROOT_DIR, "api/public");
 
 const sendFile = (req, res, fileName) => {
   if (fileName === "404.html") {
@@ -27,6 +24,7 @@ const sendFile = (req, res, fileName) => {
 const app = express();
 
 app.use(express.static(PUBLIC_DIR));
+
 app.use((req, res, next) => {
   console.log(`${req.method}: ${req.url}`);
   next();
@@ -38,6 +36,4 @@ app.get("/contact-me", (req, res) => sendFile(req, res, "contact-me.html"));
 
 app.use((req, res) => sendFile(req, res, "404.html"));
 
-app.listen(PORT, HOSTNAME, () => {
-  console.log(`Server running at ${SCHEME}://${HOSTNAME}:${PORT}/`);
-});
+export default app;
